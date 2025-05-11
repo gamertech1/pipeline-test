@@ -17,18 +17,9 @@ stages:
       environment: dev
       dependsOn: Dev
 
-  - stage: CI
-    displayName: 'Continuous Integration Tests'
-    dependsOn: Dev
-    jobs:
-      - job: RunCI
-        steps:
-          - script: echo "Running CI pipeline tasks"
-          - script: echo "Build, Lint, and Validate code"
-
   - stage: QA
     displayName: 'Deploy to QA Environment'
-    dependsOn: CI
+    dependsOn: Dev
     jobs:
       - job: DeployQA
         steps:
