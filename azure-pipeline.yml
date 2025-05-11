@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+      - main
+
+stages:
+  - stage: Dev
+    displayName: 'Deploy to Dev Environment'
+    jobs:
+      - job: DeployDev
+        steps:
+          - script: echo "Deploying to Dev environment"
+          - script: echo "Run unit tests in Dev"
+
+  - stage: CI
+    displayName: 'Continuous Integration Tests'
+    dependsOn: Dev
+    jobs:
+      - job: RunCI
+        steps:
+          - script: echo "Running CI pipeline tasks"
+          - script: echo "Build, Lint, and Validate code"
+
+  - stage: QA
+    displayName: 'Deploy to QA Environment'
+    dependsOn: CI
+    jobs:
+      - job: DeployQA
+        steps:
+          - script: echo "Deploying to QA"
+          - script: echo "Run integration and functional tests"
+
+  - stage: Stage
+    displayName: 'Deploy to Stage Environment'
+    dependsOn: QA
+    jobs:
+      - job: DeployStage
+        steps:
+          - script: echo "Deploying to Stage"
+          - script: echo "Perform smoke tests"
