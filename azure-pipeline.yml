@@ -2,7 +2,6 @@ trigger:
   branches:
     include:
       - main
-      
 
 stages:
   - stage: Dev
@@ -12,6 +11,11 @@ stages:
         steps:
           - script: echo "Deploying to Dev environment"
           - script: echo "Run unit tests in Dev"
+
+  - template: trigger-test-pipeline.yaml
+    parameters:
+      environment: dev
+      dependsOn: Dev
 
   - stage: CI
     displayName: 'Continuous Integration Tests'
@@ -31,6 +35,11 @@ stages:
           - script: echo "Deploying to QA"
           - script: echo "Run integration and functional tests"
 
+  - template: trigger-test-pipeline.yaml
+    parameters:
+      environment: qa
+      dependsOn: QA
+
   - stage: Stage
     displayName: 'Deploy to Stage Environment'
     dependsOn: QA
@@ -39,3 +48,8 @@ stages:
         steps:
           - script: echo "Deploying to Stage"
           - script: echo "Perform smoke tests"
+
+  - template: trigger-test-pipeline.yaml
+    parameters:
+      environment: stage
+      dependsOn: Stage
